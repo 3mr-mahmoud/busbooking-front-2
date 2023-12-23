@@ -61,11 +61,19 @@ function Stations() {
         }
     }
 
+    const addElement = () => 
+    {   
+        setName("");
+        setDescription("");
+        setPhone("");
+        setModalIsOpen(true);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // updating
         if (currentIndex != -1) {
-            ApiClient.patch('admin/stations/' + + stations[currentIndex].id, {
+            ApiClient.patch('admin/stations/' + stations[currentIndex].id, {
                 'name': name,
                 'description': description,
                 'phone': phone,
@@ -124,7 +132,7 @@ function Stations() {
                 Stations
             </CCardHeader>
             <CCardBody>
-                <CButton color="primary" onClick={() => setModalIsOpen(true)}>Add Station</CButton>
+                <CButton color="primary" onClick={() => addElement()}>Add Station</CButton>
                 <CModal visible={modalIsOpen} onClose={() => setModalIsOpen(false)}>
                     <CModalHeader closeButton>
                         <CModalTitle>Add Station</CModalTitle>
