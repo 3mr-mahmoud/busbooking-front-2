@@ -8,22 +8,28 @@ import {
     CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea,CFormCheck
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
-function Admins() {
+function Drivers() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [admins, setAdmins] = useState([]);
+    const [drivers, setDrivers] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(-1);
+
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
-    const [superAd, setSuper] = useState('');
+    const [salary, setSalary] = useState('');
+    const [nationalID, setNationalID] = useState('');
+    const [license, setLicense] = useState('');
+    const [city,setCity] = useState('');
+
+
 
 
     const getTableElements = () => {
-        ApiClient.get('admin/admins').then((repsonse) => {
+        ApiClient.get('admin/drivers').then((repsonse) => {
             if (repsonse.data.success) {
                 console.log(repsonse);
-                setAdmins(repsonse.data.data.admins);
+                setDrivers(repsonse.data.data.drivers);
             }
         });
     }
@@ -36,13 +42,17 @@ function Admins() {
 
     const editElement = (index) => {
         setCurrentIndex(index);
-        ApiClient.get('admin/admins/' + admins[index].id).then((repsonse) => {
+        ApiClient.get('admin/drivers/' + drivers[index].id).then((repsonse) => {
             if (repsonse.data.success) {
-                let admin = repsonse.data.data.admin;
-                setName(admin.name);
-                setEmail(admin.email);
-                setPhone(admin.phone);
-                setSuper(admin.superAd)
+                let driver = repsonse.data.data.driver;
+                setName(driver.name);
+                setEmail(driver.email);
+                setPhone(driver.phone);
+                setPassword(driver.password)
+                setCity(driver.city);
+                setLicense(driver.license);
+                setNationalID(driver.nationalID);
+                setSalary(driver.salary);
                 setModalIsOpen(true);
             }
         });
@@ -55,11 +65,11 @@ function Admins() {
 
         // If the user confirms, proceed with deletion
         if (isConfirmed) {
-            ApiClient.delete('admin/admins/' + admins[index].id).then((response) => {
+            ApiClient.delete('admin/drivers/' + drivers[index].id).then((response) => {
                 if (response.data.success) {
-                    const updated = [...admins];
+                    const updated = [...drivers];
                     updated.splice(index, 1);
-                    setAdmins(updated);
+                    setDrivers(updated);
                     toast.success("deleted succesfully");
                 }
             });
@@ -71,7 +81,10 @@ function Admins() {
         setEmail("");
         setPhone("");
         setPassword("");
-        setSuper("");
+        setSalary("");
+        setNationalID("");
+        setLicense("");
+        setCity("");
         setCurrentIndex(-1);
         setModalIsOpen(true);
     }
@@ -80,22 +93,29 @@ function Admins() {
         e.preventDefault();
         // updating
         if (currentIndex != -1) {
-            ApiClient.patch('admin/admins/' + admins[currentIndex].id, {
+            ApiClient.patch('admin/drivers/' + drivers[currentIndex].id, {
                 'name': name,
                 'email': email,
                 'phone': phone,
-                'superadmin':superAd
+                'salary': salary,
+                'national_id':nationalID,
+                'license_number':license,
+                'city':city,
+                'password':password
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     // refresh table
                     getTableElements();
                 }
                 toast.success("edited succesfully");
-                setEmail('');
-                setName('');
-                setPhone('');
-                setPassword('')
-                setSuper('');
+                setName("");
+                setEmail("");
+                setPhone("");
+                setPassword("");
+                setSalary("");
+                setNationalID("");
+                setLicense("");
+                setCity("");
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
             }).catch((error) => {
@@ -109,22 +129,28 @@ function Admins() {
             })
         } else {
             //creating
-            ApiClient.post('admin/admins', {
+            ApiClient.post('admin/drivers', {
                 'name': name,
                 'email': email,
                 'phone': phone,
-                'password':password,
-                'superadmin':superAd
+                'salary': salary,
+                'national_id':nationalID,
+                'license_number':license,
+                'city':city,
+                'password':password
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     getTableElements();
                 }
                 toast.success("added succesfully");
-                setEmail('');
-                setName('');
-                setPhone('');
-                setPassword('');
-                setSuper('');
+                setName("");
+                setEmail("");
+                setPhone("");
+                setPassword("");
+                setSalary("");
+                setNationalID("");
+                setLicense("");
+                setCity("");
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
             }).catch((error) => {
@@ -143,13 +169,13 @@ function Admins() {
         <CCard>
 
             <CCardHeader>
-                Admins
+                Drivers
             </CCardHeader>
             <CCardBody>
-                <CButton color="primary" onClick={() => addElement()}>Add Admin</CButton>
+                <CButton color="primary" onClick={() => addElement()}>Add Driver</CButton>
                 <CModal visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }}>
                     <CModalHeader closeButton>
-                        <CModalTitle>Add Admin</CModalTitle>
+                        <CModalTitle>Add Driver</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
                         <form onSubmit={handleSubmit}>
@@ -173,8 +199,26 @@ function Admins() {
                             </div>
 
                             <div className='form-group'>
-                            <CFormCheck id="flexCheckDefault" value={superAd} onChange={e=>setSuper(e.target.checked)} style={{marginTop: '7px'}} label="Super Admin"/>
+                            <label>Salary:</label>
+                                <CFormInput  value={salary} onChange={e => setSalary(e.target.value)} />
                             </div>
+
+                            <div className='form-group'>
+                            <label>National-ID:</label>
+                                <CFormInput  value={nationalID} onChange={e => setNationalID(e.target.value)} />
+                            </div>
+
+                            <div className='form-group'>
+                            <label>Licnense Number:</label>
+                                <CFormInput  value={license} onChange={e => setLicense(e.target.value)} />
+                            </div>
+
+                            <div className='form-group'>
+                            <label>City:</label>
+                                <CFormInput  value={city} onChange={e => setCity(e.target.value)} />
+                            </div>
+
+
 
                             <div className='d-flex justify-content-center mt-4'>
                                 <CButton color="primary" size='lg' type="submit">Save</CButton>
@@ -189,17 +233,24 @@ function Admins() {
                             <CTableHeaderCell scope="col">Name</CTableHeaderCell>
                             <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                             <CTableHeaderCell scope="col">Phone</CTableHeaderCell>
+                            <CTableHeaderCell scope="col">Salary</CTableHeaderCell>
+                            <CTableHeaderCell scope="col">National-ID</CTableHeaderCell>
+                            <CTableHeaderCell scope="col">City</CTableHeaderCell>
                             <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
                         {
-                            admins.map((admin, index) => (
-                                <CTableRow key={admin.id}>
-                                    <CTableDataCell>{admin.id}</CTableDataCell>
-                                    <CTableDataCell>{admin.name}</CTableDataCell>
-                                    <CTableDataCell>{admin.email}</CTableDataCell>
-                                    <CTableDataCell>{admin.phone}</CTableDataCell>
+                            drivers.map((driver, index) => (
+                                <CTableRow key={driver.id}>
+                                    <CTableDataCell>{driver.id}</CTableDataCell>
+                                    <CTableDataCell>{driver.name}</CTableDataCell>
+                                    <CTableDataCell>{driver.email}</CTableDataCell>
+                                    <CTableDataCell>{driver.phone}</CTableDataCell>
+                                    <CTableDataCell>{driver.salary}</CTableDataCell>
+                                    <CTableDataCell>{driver.nationalID}</CTableDataCell>
+                                    <CTableDataCell>{driver.city}</CTableDataCell>
+
                                     <CTableDataCell>
                                         <CButton color="success" className='mx-2' onClick={() => editElement(index)}>Edit</CButton>
                                         <CButton color="danger" className='mx-2' onClick={() => deleteElement(index)}>Delete</CButton>
@@ -215,4 +266,4 @@ function Admins() {
     );
 }
 
-export default Admins;
+export default Drivers;
