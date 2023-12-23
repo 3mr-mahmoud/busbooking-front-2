@@ -50,8 +50,8 @@ function Drivers() {
                 setPhone(driver.phone);
                 setPassword(driver.password)
                 setCity(driver.city);
-                setLicense(driver.license);
-                setNationalID(driver.nationalID);
+                setLicense(driver.license_number);
+                setNationalID(driver.national_id);
                 setSalary(driver.salary);
                 setModalIsOpen(true);
             }
