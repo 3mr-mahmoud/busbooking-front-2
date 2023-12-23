@@ -3,8 +3,11 @@ import CIcon from '@coreui/icons-react'
 import {
     cilLocationPin,
     cilSpeedometer,
+    cilUser,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
+
+
 
 const _nav = [
     {
@@ -18,6 +21,12 @@ const _nav = [
         name: 'Stations',
         to: '/admin/stations',
         icon: <CIcon icon={cilLocationPin} customClassName="nav-icon" />,
+    },
+    {
+        component: CNavItem,
+        name: 'Admin',
+        to: '/admin/admins',
+        icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
     }
 ]
 
