@@ -41,7 +41,6 @@ function Admins() {
                 setName(admin.name);
                 setEmail(admin.email);
                 setPhone(admin.phone);
-                setPassword(admin.password)
                 setModalIsOpen(true);
             }
         });
@@ -61,7 +60,7 @@ function Admins() {
                     setAdmins(updated);
                     toast.success("deleted succesfully");
                 }
-            });
+            }).catch(() => { });
         }
     }
 
@@ -82,7 +81,7 @@ function Admins() {
                 'name': name,
                 'email': email,
                 'phone': phone,
-                'password':password
+                'password': password
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     // refresh table
@@ -95,22 +94,14 @@ function Admins() {
                 setPassword('')
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
-            }).catch((error) => {
-                console.log(error);
-                if (typeof error.response.data.errors === 'object') {
-                    let errors = Object.values(error.response.data.errors).join("\n");
-                    toast.error(errors);
-                } else {
-                    toast.error(error.response.data.errors);
-                }
-            })
+            }).catch(() => { })
         } else {
             //creating
             ApiClient.post('admin/admins', {
                 'name': name,
                 'email': email,
                 'phone': phone,
-                'password':password
+                'password': password
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     getTableElements();
@@ -122,14 +113,7 @@ function Admins() {
                 setPassword('');
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
-            }).catch((error) => {
-                if (typeof error.response.data.errors === 'object') {
-                    let errors = Object.values(error.response.data.errors).join("\n");
-                    toast.error(errors);
-                } else {
-                    toast.error(error.response.data.errors);
-                }
-            });
+            }).catch(() => { })
         }
 
     };

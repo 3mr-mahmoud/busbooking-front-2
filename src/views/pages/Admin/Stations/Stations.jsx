@@ -57,7 +57,7 @@ function Stations() {
                     setStations(updated);
                     toast.success("deleted succesfully");
                 }
-            });
+            }).catch(() => { });
         }
     }
 
@@ -88,15 +88,7 @@ function Stations() {
                 setPhone('');
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
-            }).catch((error) => {
-                console.log(error);
-                if (typeof error.response.data.errors === 'object') {
-                    let errors = Object.values(error.response.data.errors).join("\n");
-                    toast.error(errors);
-                } else {
-                    toast.error(error.response.data.errors);
-                }
-            })
+            }).catch(() => { })
         } else {
             //creating
             ApiClient.post('admin/stations', {
@@ -113,14 +105,7 @@ function Stations() {
                 setPhone('');
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
-            }).catch((error) => {
-                if (typeof error.response.data.errors === 'object') {
-                    let errors = Object.values(error.response.data.errors).join("\n");
-                    toast.error(errors);
-                } else {
-                    toast.error(error.response.data.errors);
-                }
-            });
+            }).catch(() => { });
         }
 
     };
