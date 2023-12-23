@@ -1,25 +1,31 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
-import {
-    CTable,
-    CTableHeaderCell,
-    CTableRow,
-    CTableHead,
-    CTableBody,
-    CTableDataCell
-    
-  } from '@coreui/react'
+import React, { useState } from 'react'
+import { CForm, CFormLabel, CFormInput, CButton, CCard, CCardBody } from '@coreui/react';
 
-  const AddStation = () =>
-  {
-    return(
-        <>
-        
+const AddStation = () => {
+  const [stationName, setStationName] = useState('');
 
-        </>
-    )
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log('Station Name:', stationName);
+  };
 
-  export default AddStation
+  return (
+    <>
+      <CCard>
+        <CCardBody>
+          <CForm>
+            <div className="mb-3">
+              <CFormLabel htmlFor="stationName">Station Name</CFormLabel>
+              <CFormInput type="text" id="stationName" placeholder="Enter station name" />
+            </div>
+            <CButton type="submit" color="primary">Create Station</CButton>
+          </CForm>
+        </CCardBody>
+      </CCard>
+
+    </>
+  )
+}
+
+export default AddStation

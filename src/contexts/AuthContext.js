@@ -1,16 +1,18 @@
 import React, { createContext, useContext, useState } from 'react';
 import ApiClient from '../ApiClient';
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
-    const [authenticated, setAuthenticated] = useState(false);
+    const [authenticated, setAuthenticated] = useState(localStorage.getItem("token") || false);
     const [guard, setGuard] = useState(localStorage.getItem('guard') || null);
     const login = async (credentials, guard) => {
         try {
             const response = await ApiClient.post('/' + guard + '/login', credentials);
-            const { token, user: userData } = response.data;
+            console.log(response.data);
+            const { token, user: userData } = response.data.data;
 
             localStorage.setItem('user', JSON.stringify(userData));
             localStorage.setItem('token', token);
@@ -20,9 +22,15 @@ export const AuthProvider = ({ children }) => {
             setAuthenticated(true);
             localStorage.setItem('guard', guard);
             setGuard(guard);
+            return true;
         } catch (error) {
-            console.error('Login failed:', error);
-
+            if (typeof error.response.data.errors === 'object') {
+                let errors = Object.values(error.response.data.errors).join("\n");
+                toast.error(errors);
+            } else {
+                toast.error(error.response.data.errors);
+            }
+            return false;
         }
     };
 
