@@ -61,11 +61,11 @@ function Stations() {
         }
     }
 
-    const addElement = () => 
-    {   
+    const addElement = () => {
         setName("");
         setDescription("");
         setPhone("");
+        setCurrentIndex(-1);
         setModalIsOpen(true);
     }
 
@@ -133,7 +133,7 @@ function Stations() {
             </CCardHeader>
             <CCardBody>
                 <CButton color="primary" onClick={() => addElement()}>Add Station</CButton>
-                <CModal visible={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+                <CModal visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }}>
                     <CModalHeader closeButton>
                         <CModalTitle>Add Station</CModalTitle>
                     </CModalHeader>
