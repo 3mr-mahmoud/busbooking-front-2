@@ -5,7 +5,7 @@ import {
     CTableRow,
     CTableHead,
     CTableBody,
-    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea
+    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea, CFormCheck
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
 function Admins() {
@@ -16,6 +16,7 @@ function Admins() {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [superAd, setSuper] = useState('');
 
 
     const getTableElements = () => {
@@ -48,6 +49,7 @@ function Admins() {
                 setName(admin.name);
                 setEmail(admin.email);
                 setPhone(admin.phone);
+                setSuper(admin.superAd)
                 setPassword("");
                 setModalIsOpen(true);
             }
@@ -61,7 +63,7 @@ function Admins() {
 
         // If the user confirms, proceed with deletion
         if (isConfirmed) {
-            ApiClient.delete('admin/admin/' + admin[index].id).then((response) => {
+            ApiClient.delete('admin/admins/' + admins[index].id).then((response) => {
                 if (response.data.success) {
                     const updated = [...admins];
                     updated.splice(index, 1);
@@ -85,6 +87,7 @@ function Admins() {
                 'name': name,
                 'email': email,
                 'phone': phone,
+                'superadmin': superAd
                 'password': password
             }).then((repsonse) => {
                 if (repsonse.data.success) {
@@ -101,7 +104,8 @@ function Admins() {
                 'name': name,
                 'email': email,
                 'phone': phone,
-                'password': password
+                'password': password,
+                'superadmin': superAd
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     getTableElements();
@@ -145,6 +149,10 @@ function Admins() {
                             <div className='form-group'>
                                 <label>Password:</label>
                                 <CFormInput type='password' value={password} onChange={e => setPassword(e.target.value)} />
+                            </div>
+
+                            <div className='form-group'>
+                                <CFormCheck id="flexCheckDefault" value={superAd} onChange={e => setSuper(e.target.checked)} style={{ marginTop: '7px' }} label="Super Admin" />
                             </div>
 
                             <div className='d-flex justify-content-center mt-4'>
