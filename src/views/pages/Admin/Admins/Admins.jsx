@@ -32,6 +32,13 @@ function Admins() {
     }, []);
 
 
+    const resetStates = () => {
+        setName("");
+        setEmail("");
+        setPhone("");
+        setPassword("");
+        setCurrentIndex(-1);
+    }
 
     const editElement = (index) => {
         setCurrentIndex(index);
@@ -41,6 +48,7 @@ function Admins() {
                 setName(admin.name);
                 setEmail(admin.email);
                 setPhone(admin.phone);
+                setPassword("");
                 setModalIsOpen(true);
             }
         });
@@ -65,11 +73,7 @@ function Admins() {
     }
 
     const addElement = () => {
-        setName("");
-        setEmail("");
-        setPhone("");
-        setPassword("");
-        setCurrentIndex(-1);
+        resetStates();
         setModalIsOpen(true);
     }
 
@@ -88,11 +92,7 @@ function Admins() {
                     getTableElements();
                 }
                 toast.success("edited succesfully");
-                setEmail('');
-                setName('');
-                setPhone('');
-                setPassword('')
-                setCurrentIndex(-1);
+                resetStates();
                 setModalIsOpen(false);
             }).catch(() => { })
         } else {
@@ -107,11 +107,7 @@ function Admins() {
                     getTableElements();
                 }
                 toast.success("added succesfully");
-                setEmail('');
-                setName('');
-                setPhone('');
-                setPassword('');
-                setCurrentIndex(-1);
+                resetStates();
                 setModalIsOpen(false);
             }).catch(() => { })
         }
@@ -126,9 +122,9 @@ function Admins() {
             </CCardHeader>
             <CCardBody>
                 <CButton color="primary" onClick={() => addElement()}>Add Admin</CButton>
-                <CModal visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }}>
+                <CModal visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }} backdrop="static">
                     <CModalHeader closeButton>
-                        <CModalTitle>Add Admin</CModalTitle>
+                        <CModalTitle>Admin</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
                         <form onSubmit={handleSubmit}>

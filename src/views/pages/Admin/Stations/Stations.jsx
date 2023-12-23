@@ -29,6 +29,13 @@ function Stations() {
     }, []);
 
 
+    const resetStates = () => {
+        setName("");
+        setDescription("");
+        setPhone("");
+        setCurrentIndex(-1);
+    }
+
 
     const editElement = (index) => {
         setCurrentIndex(index);
@@ -62,10 +69,7 @@ function Stations() {
     }
 
     const addElement = () => {
-        setName("");
-        setDescription("");
-        setPhone("");
-        setCurrentIndex(-1);
+        resetStates();
         setModalIsOpen(true);
     }
 
@@ -83,10 +87,7 @@ function Stations() {
                     getTableElements();
                 }
                 toast.success("edited succesfully");
-                setDescription('');
-                setName('');
-                setPhone('');
-                setCurrentIndex(-1);
+                resetStates();
                 setModalIsOpen(false);
             }).catch(() => { })
         } else {
@@ -100,10 +101,7 @@ function Stations() {
                     setStations([...stations, repsonse.data.data.station]);
                 }
                 toast.success("added succesfully");
-                setDescription('');
-                setName('');
-                setPhone('');
-                setCurrentIndex(-1);
+                resetStates();
                 setModalIsOpen(false);
             }).catch(() => { });
         }
@@ -118,9 +116,9 @@ function Stations() {
             </CCardHeader>
             <CCardBody>
                 <CButton color="primary" onClick={() => addElement()}>Add Station</CButton>
-                <CModal visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }}>
+                <CModal visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }} backdrop="static">
                     <CModalHeader closeButton>
-                        <CModalTitle>Add Station</CModalTitle>
+                        <CModalTitle>Station</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
                         <form onSubmit={handleSubmit}>
