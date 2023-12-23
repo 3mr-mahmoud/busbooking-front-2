@@ -248,7 +248,7 @@ function Drivers() {
                                     <CTableDataCell>{driver.email}</CTableDataCell>
                                     <CTableDataCell>{driver.phone}</CTableDataCell>
                                     <CTableDataCell>{driver.salary}</CTableDataCell>
-                                    <CTableDataCell>{driver.nationalID}</CTableDataCell>
+                                    <CTableDataCell>{driver.national_id}</CTableDataCell>
                                     <CTableDataCell>{driver.city}</CTableDataCell>
 
                                     <CTableDataCell>
