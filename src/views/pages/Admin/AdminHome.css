@@ -1,0 +1,15 @@
+
+
+button
+{
+    margin: 5px;
+}
+.Cards
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    gap: 10px;
+}

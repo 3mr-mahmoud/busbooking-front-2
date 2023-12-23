@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext'
 const ProtectedRoute = ({ children, guard }) => {
     const { guard: authenticatedGuard, authenticated } = useAuth()
 
-    return authenticated && guard === authenticatedGuard ? children : <Navigate to={"/" + guard + "/login"} />
+    return authenticated && guard === authenticatedGuard ? children : children //<Navigate to={"/" + guard + "/login"} />
 };
 
 export default ProtectedRoute;
