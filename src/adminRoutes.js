@@ -14,6 +14,8 @@ const routes = [
     { path: '/stations', name: 'Stations', element: Stations, exact: true },
     { path: '/admins', name: 'Admins', element: Admins, exact: true },
     { path: '/drivers', name: 'Drivers', element: Drivers, exact: true },
+    { path: '/customers', name: 'Drivers', element: Customers, exact: true },
+    { path: '/trips', name: 'Trips', element: Trips, exact: true },
 
 ]
 export default routes
