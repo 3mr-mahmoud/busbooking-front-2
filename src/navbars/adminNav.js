@@ -5,8 +5,9 @@ import {
     cilSpeedometer,
     cilUser,
     cilFingerprint,
-    cilCreditCard
-    
+    cilCreditCard,
+    cilAirplaneMode
+
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
 
@@ -35,7 +36,15 @@ const _nav = [
         name: 'Drivers',
         to: '/admin/drivers',
         icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
-        
+
+
+    },
+    {
+        component: CNavItem,
+        name: 'Trips',
+        to: '/admin/trips',
+        icon: <CIcon icon={cilAirplaneMode} customClassName="nav-icon" />,
+
 
     }
 ]

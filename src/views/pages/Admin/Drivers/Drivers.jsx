@@ -5,7 +5,7 @@ import {
     CTableRow,
     CTableHead,
     CTableBody,
-    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea,CFormCheck
+    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea, CFormCheck
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
 function Drivers() {
@@ -20,7 +20,7 @@ function Drivers() {
     const [salary, setSalary] = useState('');
     const [nationalID, setNationalID] = useState('');
     const [license, setLicense] = useState('');
-    const [city,setCity] = useState('');
+    const [city, setCity] = useState('');
 
 
 
@@ -50,8 +50,8 @@ function Drivers() {
                 setPhone(driver.phone);
                 setPassword(driver.password)
                 setCity(driver.city);
-                setLicense(driver.license);
-                setNationalID(driver.nationalID);
+                setLicense(driver.license_number);
+                setNationalID(driver.national_id);
                 setSalary(driver.salary);
                 setModalIsOpen(true);
             }
@@ -72,7 +72,7 @@ function Drivers() {
                     setDrivers(updated);
                     toast.success("deleted succesfully");
                 }
-            });
+            }).catch(() => { });
         }
     }
 
@@ -98,10 +98,10 @@ function Drivers() {
                 'email': email,
                 'phone': phone,
                 'salary': salary,
-                'national_id':nationalID,
-                'license_number':license,
-                'city':city,
-                'password':password
+                'national_id': nationalID,
+                'license_number': license,
+                'city': city,
+                'password': password
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     // refresh table
@@ -118,15 +118,7 @@ function Drivers() {
                 setCity("");
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
-            }).catch((error) => {
-                console.log(error);
-                if (typeof error.response.data.errors === 'object') {
-                    let errors = Object.values(error.response.data.errors).join("\n");
-                    toast.error(errors);
-                } else {
-                    toast.error(error.response.data.errors);
-                }
-            })
+            }).catch(() => { })
         } else {
             //creating
             ApiClient.post('admin/drivers', {
@@ -134,10 +126,10 @@ function Drivers() {
                 'email': email,
                 'phone': phone,
                 'salary': salary,
-                'national_id':nationalID,
-                'license_number':license,
-                'city':city,
-                'password':password
+                'national_id': nationalID,
+                'license_number': license,
+                'city': city,
+                'password': password
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     getTableElements();
@@ -153,14 +145,7 @@ function Drivers() {
                 setCity("");
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
-            }).catch((error) => {
-                if (typeof error.response.data.errors === 'object') {
-                    let errors = Object.values(error.response.data.errors).join("\n");
-                    toast.error(errors);
-                } else {
-                    toast.error(error.response.data.errors);
-                }
-            });
+            }).catch(() => { });
         }
 
     };
@@ -199,23 +184,23 @@ function Drivers() {
                             </div>
 
                             <div className='form-group'>
-                            <label>Salary:</label>
-                                <CFormInput  value={salary} onChange={e => setSalary(e.target.value)} />
+                                <label>Salary:</label>
+                                <CFormInput value={salary} onChange={e => setSalary(e.target.value)} />
                             </div>
 
                             <div className='form-group'>
-                            <label>National-ID:</label>
-                                <CFormInput  value={nationalID} onChange={e => setNationalID(e.target.value)} />
+                                <label>National-ID:</label>
+                                <CFormInput value={nationalID} onChange={e => setNationalID(e.target.value)} />
                             </div>
 
                             <div className='form-group'>
-                            <label>Licnense Number:</label>
-                                <CFormInput  value={license} onChange={e => setLicense(e.target.value)} />
+                                <label>Licnense Number:</label>
+                                <CFormInput value={license} onChange={e => setLicense(e.target.value)} />
                             </div>
 
                             <div className='form-group'>
-                            <label>City:</label>
-                                <CFormInput  value={city} onChange={e => setCity(e.target.value)} />
+                                <label>City:</label>
+                                <CFormInput value={city} onChange={e => setCity(e.target.value)} />
                             </div>
 
 
