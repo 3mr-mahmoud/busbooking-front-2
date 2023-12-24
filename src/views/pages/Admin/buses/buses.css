@@ -1,0 +1,16 @@
+.seats-container {
+    margin-top: 20px;
+    max-width: 200px;
+}
+
+.seat-box {
+    padding: 10px;
+    text-align: center;
+    background: #f0f8ff;
+    border: 1px solid;
+    cursor: pointer;
+}
+
+.seat-row {
+    margin: 2px;
+}

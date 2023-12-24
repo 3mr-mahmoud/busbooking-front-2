@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import './buses.css';
 import {
     CCard, CCardBody, CCardHeader, CTable, CTableHeaderCell,
     CTableRow,
     CTableHead,
     CTableBody,
-    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea,CFormSelect
+    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea, CFormSelect, CRow, CCol, CContainer, CTooltip
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
+
 function buses() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [seatModalIsOpen, setSeatModalIsOpen] = useState(false);
     const [buses, setbuses] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(-1);
+    const [currentSeat, setCurrentSeat] = useState(-1);
+    const [seatsArr, setSeatsArr] = useState([]);
+    const [note, setNote] = useState("");
     const [platenumber, setPlatenumber] = useState('');
     const [model, setModel] = useState('');
     const [capacity, setCapacity] = useState('');
     const [seats, setSeats] = useState('');
-    const [bus_categories, setBusCategories] = useState([]);
+    const [busCategories, setBusCategories] = useState([]);
     const [busCategoryId, setBusCategoryId] = useState(0);
+
+
 
     const getTableElements = () => {
         ApiClient.get('admin/buses').then((repsonse) => {
@@ -25,17 +33,21 @@ function buses() {
                 setbuses(repsonse.data.data.buses);
             }
         });
+    }
 
-        // ApiClient.get('admin/bus_categories').then((repsonse) => {
-        //     if (repsonse.data.success) {
-        //         setBusCategories(repsonse.data.data.bus_categories);
-        //     }
-        // });
+    const getInitialData = () => {
+        getTableElements()
+
+        ApiClient.get('admin/bus-categories').then((repsonse) => {
+            if (repsonse.data.success) {
+                setBusCategories(repsonse.data.data.bus_categories);
+            }
+        });
 
     }
 
     useEffect(() => {
-        getTableElements();
+        getInitialData();
     }, []);
 
 
@@ -45,7 +57,7 @@ function buses() {
         setCapacity("");
         setSeats("");
         setCurrentIndex(-1);
-        setBusCategoryId("");
+        setBusCategoryId(null);
     }
 
 
@@ -58,6 +70,7 @@ function buses() {
                 setCapacity(bus.capacity);
                 setModel(bus.model);
                 setSeats(bus.seats.length);
+                setSeatsArr(bus.seats);
                 setBusCategoryId(bus.bus_category_id);
                 setModalIsOpen(true);
             }
@@ -87,18 +100,47 @@ function buses() {
         setModalIsOpen(true);
     }
 
+    const editSeat = (seatIndex) => {
+        setNote(seatsArr[seatIndex].note);
+        setCurrentSeat(seatIndex);
+        setSeatModalIsOpen(true);
+    }
+
+
+    const handleSeatUpdate = (e) => {
+        e.preventDefault();
+        let data = {
+            'note': note,
+        };
+        // updating
+        if (currentIndex != -1 && currentSeat != -1) {
+            ApiClient.patch('admin/buses/' + buses[currentIndex].id + '/seats/' + seatsArr[currentSeat].seat_number, data).then((repsonse) => {
+                if (repsonse.data.success) {
+                    let updated = [...seatsArr];
+                    updated[currentSeat] = repsonse.data.data.seat;
+                    setSeatsArr(updated);
+                }
+                toast.success("edited succesfully");
+                setNote("");
+                setCurrentSeat(-1);
+                setSeatModalIsOpen(false);
+            }).catch(() => { })
+        }
+
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        let data = {
+            'plate_number': platenumber,
+            'capacity': capacity,
+            'model': model,
+            'seats': seats,
+            'bus_category_id': busCategoryId,
+        };
         // updating
         if (currentIndex != -1) {
-            ApiClient.patch('admin/buses/' + buses[currentIndex].id, {
-                'plate_number': platenumber ,
-                'capacity': capacity,
-                'model': model,
-                'seats': seats,
-                'bus_category_id': busCategoryId,
-                
-            }).then((repsonse) => {
+            ApiClient.patch('admin/buses/' + buses[currentIndex].id, data).then((repsonse) => {
                 if (repsonse.data.success) {
                     // refresh table
                     getTableElements();
@@ -109,13 +151,7 @@ function buses() {
             }).catch(() => { })
         } else {
             //creating
-            ApiClient.post('admin/buses', {
-                'plate_number': platenumber ,
-                'capacity': capacity,
-                'model': model,
-                'seats': seats,
-                'bus_category_id': busCategoryId,
-            }).then((repsonse) => {
+            ApiClient.post('admin/buses', data).then((repsonse) => {
                 if (repsonse.data.success) {
                     getTableElements();
                 }
@@ -131,11 +167,11 @@ function buses() {
         <CCard>
 
             <CCardHeader>
-            Buses
+                Buses
             </CCardHeader>
             <CCardBody>
                 <CButton color="primary" onClick={() => addElement()}>Add Bus</CButton>
-                <CModal visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }} backdrop="static">
+                <CModal className='overflow-hidden' visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }} backdrop="static">
                     <CModalHeader closeButton>
                         <CModalTitle>Bus</CModalTitle>
                     </CModalHeader>
@@ -159,12 +195,8 @@ function buses() {
                                 <label>Seats:</label>
                                 <CFormInput value={seats} onChange={e => setSeats(e.target.value)} />
                             </div>
+
                             <div className='form-group'>
-                                <label>bus Category :</label>
-                                <CFormInput value={busCategoryId} onChange={e => setBusCategoryId(e.target.value)} />
-                            </div>
-                           
-                            {/* <div className='form-group'>
                                 <label>Bus Category:</label>
                                 <CFormSelect
                                     value={busCategoryId}
@@ -172,13 +204,30 @@ function buses() {
                                     required
                                 >
                                     <option value="">-- SELECT -- </option>
-                                    {bus_categories.map((bus_categories) => (
-                                        <option key={bus_categories.bus_category_id} value={bus_categories.bus_category_id}>
-                                            {bus_categories.id}
+                                    {busCategories.map((category) => (
+                                        <option key={category.id} value={category.id}>
+                                            {category.name}
                                         </option>
                                     ))}
                                 </CFormSelect>
-                            </div> */}
+                            </div>
+
+                            {currentIndex !== -1 && <div className='position-relative seats-container d-flex flex-column' >
+                                <h3>Seats</h3>
+                                {seatsArr.map((seatRow, index) => (
+                                    index % 4 === 0 && (
+                                        <CRow className='seat-row' key={index}>
+                                            {seatsArr.slice(index, index + 4).map((seat, ind) => (
+                                                <CCol className='seat-box col-3' onClick={() => editSeat(index + ind)} key={seat.id}>
+                                                    {seat.note != null ? (<CTooltip content={seat.note}>
+                                                        <span>{seat.seat_number}</span>
+                                                    </CTooltip>) : (seat.seat_number)}
+                                                </CCol>
+                                            ))}
+                                        </CRow>
+                                    )
+                                ))}
+                            </div>}
 
                             <div className='d-flex justify-content-center mt-4'>
                                 <CButton color="primary" size='lg' type="submit">Save</CButton>
@@ -186,6 +235,27 @@ function buses() {
                         </form>
                     </CModalBody>
                 </CModal>
+
+                <CModal visible={seatModalIsOpen} onClose={() => { setSeatModalIsOpen(false); }} backdrop="static">
+                    <CModalHeader closeButton>
+                        <CModalTitle>Seats number {currentSeat != -1 && seatsArr[currentSeat].seat_number}</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <form onSubmit={handleSeatUpdate}>
+
+
+                            <div className='form-group'>
+                                <label>Note:</label>
+                                <CFormTextarea value={note} onChange={e => setNote(e.target.value)} />
+                            </div>
+
+                            <div className='d-flex justify-content-center mt-4'>
+                                <CButton color="primary" size='lg' type="submit">Save</CButton>
+                            </div>
+                        </form>
+                    </CModalBody>
+                </CModal>
+
                 <CTable striped>
                     <CTableHead>
                         <CTableRow>
@@ -217,7 +287,7 @@ function buses() {
                     </CTableBody>
                 </CTable>
             </CCardBody>
-        </CCard>
+        </CCard >
     );
 }
 

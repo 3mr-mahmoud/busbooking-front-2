@@ -3,8 +3,10 @@ import { NavLink, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { CBadge } from '@coreui/react'
+import { useAuth } from 'src/contexts/AuthContext'
 
 export const AppSidebarNav = ({ items }) => {
+  const { user } = useAuth();
   const location = useLocation()
   const navLink = (name, icon, badge) => {
     return (
@@ -27,8 +29,8 @@ export const AppSidebarNav = ({ items }) => {
       <Component
         {...(rest.to &&
           !rest.items && {
-            component: NavLink,
-          })}
+          component: NavLink,
+        })}
         key={index}
         {...rest}
       >
@@ -57,7 +59,12 @@ export const AppSidebarNav = ({ items }) => {
   return (
     <React.Fragment>
       {items &&
-        items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
+        items.map((item, index) => {
+          if (item.superadmin && !user.superadmin) {
+            return;
+          }
+          return item.items ? navGroup(item, index) : navItem(item, index)
+        })}
     </React.Fragment>
   )
 }

@@ -5,7 +5,7 @@ import {
     CTableRow,
     CTableHead,
     CTableBody,
-    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea,CFormCheck
+    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea, CFormCheck
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
 function Customers() {
@@ -31,18 +31,13 @@ function Customers() {
         getTableElements();
     }, []);
 
-    const resetStates = () => {
-        setBalance("");
-        setCurrentIndex(-1);
-    }
-
 
     const editElement = (index) => {
         setCurrentIndex(index);
         ApiClient.get('admin/customers/' + customers[index].id).then((repsonse) => {
             if (repsonse.data.success) {
                 let customer = repsonse.data.data.customer;
-                setBalance(customer.balance)
+                setBalance(customer.wallet_balance)
                 setModalIsOpen(true);
             }
         });
@@ -72,7 +67,7 @@ function Customers() {
         // updating
         if (currentIndex != -1) {
             ApiClient.patch('admin/customers/' + customers[currentIndex].id, {
-               'wallet_balance':balance
+                'wallet_balance': balance
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     // refresh table
@@ -91,7 +86,7 @@ function Customers() {
                     toast.error(error.response.data.errors);
                 }
             })
-        } 
+        }
 
     };
 
@@ -107,11 +102,11 @@ function Customers() {
                     </CModalHeader>
                     <CModalBody>
                         <form onSubmit={handleSubmit}>
-                            
-                            
+
+
                             <div className='form-group'>
-                            <label>Balance:</label>
-                                <CFormInput  value={balance} onChange={e => setBalance(e.target.value)} />
+                                <label>Balance:</label>
+                                <CFormInput value={balance} onChange={e => setBalance(e.target.value)} />
                             </div>
 
 

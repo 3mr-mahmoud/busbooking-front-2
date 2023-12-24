@@ -9,7 +9,8 @@ import {
     cilAirplaneMode,
 
     cilPeople,
-    cilBusAlt
+    cilBusAlt,
+    cilCog
 
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
@@ -30,6 +31,7 @@ const _nav = [
     },
     {
         component: CNavItem,
+        superadmin: 1,
         name: 'Admin',
         to: '/admin/admins',
         icon: <CIcon icon={cilFingerprint} customClassName="nav-icon" />,
@@ -68,9 +70,9 @@ const _nav = [
     },
     {
         component: CNavItem,
-        name: 'services',
-        to: '/admin/Services',
-        icon: <CIcon icon={cilBusAlt} customClassName="nav-icon" />,
+        name: 'Services',
+        to: '/admin/services',
+        icon: <CIcon icon={cilCog} customClassName="nav-icon" />,
 
 
     }
