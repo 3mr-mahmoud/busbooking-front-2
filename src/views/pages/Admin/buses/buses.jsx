@@ -187,7 +187,7 @@ function buses() {
                             </div>
 
                             <div className='form-group'>
-                                <label>capacity:</label>
+                                <label>Capacity:</label>
                                 <CFormInput value={capacity} onChange={e => setCapacity(e.target.value)} />
                             </div>
 

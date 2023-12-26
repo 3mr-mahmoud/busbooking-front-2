@@ -31,7 +31,6 @@ const AdminHome = () => {
   const [routeTrips, setRouteTrips] = useState([]);
   useEffect(() => {
     ApiClient.get('admin/dashboard').then((repsonse) => {
-      console.log(repsonse.data.data);
       if (repsonse.data.success) {
         setAvgTrips(repsonse.data.data.stats.average_trips_price);
         setTicketsCount(repsonse.data.data.stats.tickets_count);
@@ -141,8 +140,8 @@ const AdminHome = () => {
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                      {routeTrips.map((route) => (
-                        <CTableRow key={route.route_name}>
+                      {routeTrips.map((route, index) => (
+                        <CTableRow key={index}>
                           <CTableDataCell>{route.route_name}</CTableDataCell>
                           <CTableDataCell>{route.trips_count}</CTableDataCell>
                           <CTableDataCell>{route.stations_count}</CTableDataCell>

@@ -1,10 +1,6 @@
 import React from 'react'
 import {
-  CAvatar,
-  CBadge,
   CDropdown,
-  CDropdownDivider,
-  CDropdownHeader,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
@@ -28,7 +24,8 @@ const AppHeaderDropdown = () => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
 
-        <Link to="/admin/profile" className='dropdown-item'>
+
+        <Link to="/customer/profile" className='dropdown-item'>
           <CIcon icon={cilUser} className="me-2" />
           Profile
         </Link>

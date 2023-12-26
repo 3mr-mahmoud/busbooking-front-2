@@ -32,17 +32,17 @@ const Login = () => {
     login({
       email: email,
       password: password,
-    }, 'admin');
+    }, 'customer');
 
     // if (resp) {
-    //   navigate('/admin/dashboard');
+    //   navigate('/customer/dashboard');
     // }
   };
 
   useEffect(() => {
     // Use useEffect for navigation after login
-    if (authenticated && guard == 'admin') {
-      navigate('/admin/dashboard');
+    if (authenticated && guard == 'customer') {
+      navigate('/customer/');
     }
   }, [guard, authenticated, navigate]);
 

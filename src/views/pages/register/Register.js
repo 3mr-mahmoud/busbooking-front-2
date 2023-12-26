@@ -1,20 +1,58 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CButton,
   CCard,
   CCardBody,
   CCol,
   CContainer,
-  CForm,
   CFormInput,
-  CInputGroup,
-  CInputGroupText,
   CRow,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+import { useAuth } from 'src/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
+import ApiClient from 'src/ApiClient';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
+  const { authenticated, login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // updating
+    ApiClient.post('customer/register', {
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'password_confirmation': passwordConfirmation,
+      'password': password
+    }).then((repsonse) => {
+      if (repsonse.data.success) {
+        login({
+          'email': email,
+          'password': password
+        }, "customer");
+      }
+      toast.success("edited succesfully");
+    }).catch(() => { })
+
+  };
+
+  useEffect(() => {
+    // Use useEffect for navigation after login
+    if (authenticated) {
+      navigate('/customer');
+    }
+  }, [authenticated, navigate]);
+
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -22,48 +60,44 @@ const Register = () => {
           <CCol md={9} lg={7} xl={6}>
             <CCard className="mx-4">
               <CCardBody className="p-4">
-                <CForm>
+                <form onSubmit={handleSubmit}>
                   <h1>Register</h1>
                   <p className="text-medium-emphasis">Create your account</p>
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
-                      <CIcon icon={cilUser} />
-                    </CInputGroupText>
-                    <CFormInput placeholder="Username" autoComplete="username" />
-                  </CInputGroup>
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>@</CInputGroupText>
-                    <CFormInput placeholder="Email" autoComplete="email" />
-                  </CInputGroup>
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
-                      <CIcon icon={cilLockLocked} />
-                    </CInputGroupText>
-                    <CFormInput
-                      type="password"
-                      placeholder="Password"
-                      autoComplete="new-password"
-                    />
-                  </CInputGroup>
-                  <CInputGroup className="mb-4">
-                    <CInputGroupText>
-                      <CIcon icon={cilLockLocked} />
-                    </CInputGroupText>
-                    <CFormInput
-                      type="password"
-                      placeholder="Repeat password"
-                      autoComplete="new-password"
-                    />
-                  </CInputGroup>
-                  <div className="d-grid">
-                    <CButton color="success">Create Account</CButton>
+                  <div className='form-group'>
+                    <label>Name:</label>
+                    <CFormInput value={name} onChange={e => setName(e.target.value)} required />
                   </div>
-                </CForm>
+                  <div className='form-group'>
+                    <label>Phone:</label>
+                    <CFormInput value={phone} onChange={e => setPhone(e.target.value)} autoComplete={false} required />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>Email:</label>
+                    <CFormInput value={email} onChange={e => setEmail(e.target.value)} autoComplete={false} required />
+                  </div>
+
+                  <div className='form-group'>
+                    <label>Password:</label>
+                    <CFormInput type='password' value={password} onChange={e => setPassword(e.target.value)} autoComplete={false} required />
+                  </div>
+                  <div className='form-group'>
+                    <label>Password:</label>
+                    <CFormInput type='password' value={passwordConfirmation} onChange={e => setPasswordConfirmation(e.target.value)} autoComplete={false} required />
+                  </div>
+
+
+
+                  <div className='d-flex justify-content-center mt-4'>
+                    <CButton color="primary" size='lg' type="submit">Register</CButton>
+                  </div>
+                </form>
               </CCardBody>
             </CCard>
           </CCol>
         </CRow>
       </CContainer>
+      <ToastContainer />
     </div>
   )
 }

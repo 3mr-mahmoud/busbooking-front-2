@@ -29,6 +29,28 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const refreshData = async () => {
+        try {
+            const response = await ApiClient.get('/' + guard + '/me');
+            if (response) {
+                const { user: userData } = response.data.data;
+
+                localStorage.setItem('user', JSON.stringify(userData));
+
+                setUser(userData);
+            }
+        } catch (error) {
+            let loginPath = guard + '/login';
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            localStorage.removeItem('guard');
+            setUser(null);
+            setAuthenticated(false);
+            setGuard("");
+            navigate(loginPath);
+        }
+    }
+
     const logout = async () => {
 
         try {
@@ -52,7 +74,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ guard, authenticated, user, login, logout }}>
+        <AuthContext.Provider value={{ guard, authenticated, user, login, logout, refreshData }}>
             {children}
         </AuthContext.Provider>
     );
