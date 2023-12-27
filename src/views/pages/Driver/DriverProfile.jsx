@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import {
     CCard, CCardBody, CCardHeader,
-    CButton, CFormInput
+    CButton, CFormInput, CFormCheck
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
 import { useAuth } from 'src/contexts/AuthContext';
@@ -16,6 +16,30 @@ function Profile() {
     const [license, setLicense] = useState('');
     const [city, setCity] = useState('');
 
+    const [stations, setStations] = useState([]);
+    const [checkedStations, setCheckedStations] = useState([]);
+
+
+    const getStations = () => {
+        ApiClient.get('driver/stations').then((repsonse) => {
+            if (repsonse.data.success) {
+                setStations(repsonse.data.data.stations);
+            }
+        });
+    }
+
+    useEffect(() => {
+        getStations();
+    }, []);
+
+    const handleCheckChange = (station, isChecked) => {
+        if (isChecked) {
+            setCheckedStations([...checkedStations, station.id]);
+        } else {
+            setCheckedStations(checkedStations.filter(id => id !== station.id));
+        }
+    }
+
     useEffect(() => {
         setName(authUser.name);
         setEmail(authUser.email);
@@ -23,6 +47,7 @@ function Profile() {
         setCity(authUser.city);
         setLicense(authUser.license_number);
         setNationalID(authUser.national_id);
+        setCheckedStations(authUser.preferred_stations.map(station => station.station_id));
         setPassword("");
     }, [authUser]);
 
@@ -36,7 +61,8 @@ function Profile() {
             'national_id': nationalID,
             'license_number': license,
             'city': city,
-            'password': password
+            'password': password,
+            'stations': checkedStations
         }).then((repsonse) => {
             if (repsonse.data.success) {
                 // refresh user data
@@ -87,6 +113,21 @@ function Profile() {
                     <div className='form-group'>
                         <label>City:</label>
                         <CFormInput value={city} onChange={e => setCity(e.target.value)} />
+                    </div>
+
+                    <div className='form-group'>
+                        <label>Preferred Stations:</label>
+                        {stations.map((station, index) => (
+                            <CFormCheck
+                                key={index}
+                                id={`checkbox${index}`}
+                                label={station.name}
+                                checked={checkedStations.includes(station.id)}
+                                onChange={(e) => {
+                                    handleCheckChange(station, e.target.checked);
+                                }}
+                            />
+                        ))}
                     </div>
 
                     <div className='d-flex justify-content-center mt-4'>

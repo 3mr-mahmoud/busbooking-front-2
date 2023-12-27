@@ -17,7 +17,7 @@ function Bus_Categories() {
     const [currentIndex, setCurrentIndex] = useState(-1);
 
     const [name, setName] = useState('');
-    
+
     const handleCheckChange = (service, isChecked) => {
         if (isChecked) {
             setCheckedServices([...checkedServices, service.id]);
@@ -29,7 +29,6 @@ function Bus_Categories() {
     const getTableElements = () => {
         ApiClient.get('admin/bus-categories').then((repsonse) => {
             if (repsonse.data.success) {
-                console.log(repsonse);
                 setCategories(repsonse.data.data.bus_categories);
             }
         });
@@ -38,24 +37,20 @@ function Bus_Categories() {
     const getServices = () => {
         ApiClient.get('admin/services').then((repsonse) => {
             if (repsonse.data.success) {
-                console.log(repsonse);
                 setServices(repsonse.data.data.services);
             }
         });
     }
 
-    
+
 
 
 
 
     useEffect(() => {
         getTableElements();
-    }, []);
-
-    useEffect(() => {
         getServices();
-    }, [])
+    }, []);
 
 
 
@@ -65,9 +60,9 @@ function Bus_Categories() {
             if (repsonse.data.success) {
                 let category = repsonse.data.data.bus_category;
                 setName(category.name);
-                
+
                 setCheckedServices(category.services.map(service => service.id));
-                
+
                 setModalIsOpen(true);
             }
         });
@@ -105,7 +100,7 @@ function Bus_Categories() {
             ApiClient.patch('admin/bus-categories/' + categories[currentIndex].id, {
                 'name': name,
                 'services': checkedServices
-                
+
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     // refresh table
@@ -156,20 +151,21 @@ function Bus_Categories() {
                                 <label>Name:</label>
                                 <CFormInput value={name} onChange={e => setName(e.target.value)} required />
                             </div>
-                            <div>
-        {services.map((service, index) => (
-            <CFormCheck 
-                key={index}
-                id={`checkbox${index}`}
-                label={service.name}
-                checked={checkedServices.includes(service.id)}
-                onChange={(e) => {
-                    handleCheckChange(service, e.target.checked);
-                }}
-            />
-        ))}
-    </div>
-                            
+                            <div className='form-group'>
+                                <label>Services:</label>
+                                {services.map((service, index) => (
+                                    <CFormCheck
+                                        key={index}
+                                        id={`checkbox${index}`}
+                                        label={service.name}
+                                        checked={checkedServices.includes(service.id)}
+                                        onChange={(e) => {
+                                            handleCheckChange(service, e.target.checked);
+                                        }}
+                                    />
+                                ))}
+                            </div>
+
                             <div className='d-flex justify-content-center mt-4'>
                                 <CButton color="primary" size='lg' type="submit">Save</CButton>
                             </div>
@@ -179,16 +175,16 @@ function Bus_Categories() {
                 <CTable striped>
                     <CTableHead>
                         <CTableRow>
-                            
+
                             <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                            
+
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
                         {
                             categories.map((category, index) => (
                                 <CTableRow key={category.id}>
-                                    <CTableDataCell>{category.name}</CTableDataCell>     
+                                    <CTableDataCell>{category.name}</CTableDataCell>
                                     <CTableDataCell>
                                         <CButton color="success" className='mx-2' onClick={() => editElement(index)}>Edit</CButton>
                                         <CButton color="danger" className='mx-2' onClick={() => deleteElement(index)}>Delete</CButton>

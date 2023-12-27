@@ -27,6 +27,7 @@ const routes = [
     { path: '/customers', name: 'Drivers', element: Customers, exact: true },
     { path: '/trips', name: 'Trips', element: Trips, exact: true },
     { path: '/trips/:tripId/reviews', name: 'Show Trip Reviews', element: Reviews, exact: true },
+    { path: '/trips/:tripId/tickets', name: 'Show Trip Tickets', element: Tickets, exact: true },
     { path: '/buses', name: 'bases', element: Buses, exact: true },
     { path: '/services', name: 'Services', element: Services, exact: true },
     { path: '/categories', name: 'Categories', element: Bus_Categories, exact: true }
