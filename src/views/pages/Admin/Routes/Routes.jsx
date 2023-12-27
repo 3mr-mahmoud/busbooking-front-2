@@ -5,65 +5,73 @@ import {
     CTableRow,
     CTableHead,
     CTableBody,
-    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea, CFormCheck
+    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea, CFormCheck, CFormSelect
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
-function Bus_Categories() {
+function Routes() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
-    const [services, setServices] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [checkedServices, setCheckedServices] = useState([]);
+    const [stations, setStations] = useState([]);
+    const [routes, setRoutes] = useState([]);
+    const [checkedStations, setCheckedStations] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(-1);
 
     const [name, setName] = useState('');
-
-    const handleCheckChange = (service, isChecked) => {
+    
+    const handleCheckChange = (station, isChecked) => {
         if (isChecked) {
-            setCheckedServices([...checkedServices, service.id]);
+            setCheckedStations([...checkedStations, station.id]);
         } else {
-            setCheckedServices(checkedServices.filter(id => id !== service.id));
+            setCheckedStations(checkedStations.filter(id => id !== station.id));
         }
     }
 
     const getTableElements = () => {
-        ApiClient.get('admin/bus-categories').then((repsonse) => {
+        ApiClient.get('admin/routes').then((repsonse) => {
             if (repsonse.data.success) {
-                setCategories(repsonse.data.data.bus_categories);
+                console.log(repsonse);
+                setRoutes(repsonse.data.data.routes);
             }
         });
     }
 
-    const getServices = () => {
-        ApiClient.get('admin/services').then((repsonse) => {
+    const getStations = () => {
+        ApiClient.get('admin/stations').then((repsonse) => {
             if (repsonse.data.success) {
-                setServices(repsonse.data.data.services);
+                console.log(repsonse);
+                setStations(repsonse.data.data.stations);
             }
         });
     }
 
-
+    
 
 
 
 
     useEffect(() => {
         getTableElements();
-        getServices();
     }, []);
+
+    useEffect(() => {
+        getStations();
+    }, [])
 
 
 
     const editElement = (index) => {
         setCurrentIndex(index);
-        ApiClient.get('admin/bus-categories/' + categories[index].id).then((repsonse) => {
+        ApiClient.get('admin/routes/' + routes[index].id).then((repsonse) => {
             if (repsonse.data.success) {
+
+                let route = repsonse.data.data.route;
+                setName(route.name);
                 
-                let category = repsonse.data.data.bus_category;
-                setName(category.name);
+                setCheckedStations(route.stations.map(station => station.id));
 
-                setCheckedServices(category.services.map(service => service.id));
+                
 
+                
                 setModalIsOpen(true);
             }
         });
@@ -76,11 +84,11 @@ function Bus_Categories() {
 
         // If the user confirms, proceed with deletion
         if (isConfirmed) {
-            ApiClient.delete('admin/bus-categories/' + categories[index].id).then((response) => {
+            ApiClient.delete('admin/routes/' + routes[index].id).then((response) => {
                 if (response.data.success) {
-                    const updated = [...categories];
+                    const updated = [...routes];
                     updated.splice(index, 1);
-                    setCategories(updated);
+                    setRoutes(updated);
                     toast.success("deleted succesfully");
                 }
             }).catch(() => { });
@@ -89,7 +97,7 @@ function Bus_Categories() {
 
     const addElement = () => {
         setName("");
-        setCheckedServices([]);
+        setCheckedStations([]);
         setCurrentIndex(-1);
         setModalIsOpen(true);
     }
@@ -98,10 +106,10 @@ function Bus_Categories() {
         e.preventDefault();
         // updating
         if (currentIndex != -1) {
-            ApiClient.patch('admin/bus-categories/' + categories[currentIndex].id, {
+            ApiClient.patch('admin/routes/' + routes[currentIndex].id, {
                 'name': name,
-                'services': checkedServices
-
+                'stations': checkedStations
+                
             }).then((repsonse) => {
                 if (repsonse.data.success) {
                     // refresh table
@@ -109,15 +117,15 @@ function Bus_Categories() {
                 }
                 toast.success("edited succesfully");
                 setName("");
-                setCheckedServices([]);
+                setCheckedStations([]);
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
             }).catch(() => { })
         } else {
             //creating
-            ApiClient.post('admin/bus-categories', {
+            ApiClient.post('admin/routes', {
                 'name': name,
-                'services': checkedServices
+                'stations': checkedStations
 
             }).then((repsonse) => {
                 if (repsonse.data.success) {
@@ -125,7 +133,7 @@ function Bus_Categories() {
                 }
                 toast.success("added succesfully");
                 setName("");
-                setCheckedServices([]);
+                setCheckedStations([]);
 
                 setCurrentIndex(-1);
                 setModalIsOpen(false);
@@ -138,13 +146,13 @@ function Bus_Categories() {
         <CCard>
 
             <CCardHeader>
-                Categories
+                Routes
             </CCardHeader>
             <CCardBody>
-                <CButton color="primary" onClick={() => addElement()}>Add Category</CButton>
+                <CButton color="primary" onClick={() => addElement()}>Add Route</CButton>
                 <CModal visible={modalIsOpen} onClose={() => { setModalIsOpen(false); }}>
                     <CModalHeader closeButton>
-                        <CModalTitle>Add Category</CModalTitle>
+                        <CModalTitle>Add Route</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
                         <form onSubmit={handleSubmit}>
@@ -152,21 +160,38 @@ function Bus_Categories() {
                                 <label>Name:</label>
                                 <CFormInput value={name} onChange={e => setName(e.target.value)} required />
                             </div>
-                            <div className='form-group'>
-                                <label>Services:</label>
-                                {services.map((service, index) => (
-                                    <CFormCheck
-                                        key={index}
-                                        id={`checkbox${index}`}
-                                        label={service.name}
-                                        checked={checkedServices.includes(service.id)}
-                                        onChange={(e) => {
-                                            handleCheckChange(service, e.target.checked);
-                                        }}
-                                    />
-                                ))}
-                            </div>
+                            <div>
+    {stations.map((station, index) => (
+        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+            <CFormCheck 
+                id={`checkbox${index}`}
+                label={station.name}
+                checked={checkedStations.includes(station.id)}
+                onChange={(e) => {
+                    handleCheckChange(station, e.target.checked);
+                }}
+            />
+            {checkedStations.includes(station.id) && (
+                <CFormSelect 
+                    aria-label="Default select example"
+                    style={{ marginLeft: '10px', marginTop: '10px',width: '75px' }} // Adjust the size and margin as needed
+                    onChange={(e) => {
+                        handleOrderChange(station, e.target.value);
+                    }}
+                >
+                    {[...Array(checkedStations.length)].map((_, i) => (
+                        <option key={i} value={i+1}>{i+1}</option>
+                    ))}
+                </CFormSelect>
+            )}
+        </div>
+    ))}
+</div>
 
+
+
+
+                            
                             <div className='d-flex justify-content-center mt-4'>
                                 <CButton color="primary" size='lg' type="submit">Save</CButton>
                             </div>
@@ -176,16 +201,20 @@ function Bus_Categories() {
                 <CTable striped>
                     <CTableHead>
                         <CTableRow>
-
+                            
                             <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                            <CTableHeaderCell scope="col">ID</CTableHeaderCell>
 
+                            
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
                         {
-                            categories.map((category, index) => (
-                                <CTableRow key={category.id}>
-                                    <CTableDataCell>{category.name}</CTableDataCell>
+                            routes.map((route, index) => (
+                                <CTableRow key={route.id}>
+                                    <CTableDataCell>{route.name}</CTableDataCell> 
+                                    <CTableDataCell>{route.id}</CTableDataCell> 
+
                                     <CTableDataCell>
                                         <CButton color="success" className='mx-2' onClick={() => editElement(index)}>Edit</CButton>
                                         <CButton color="danger" className='mx-2' onClick={() => deleteElement(index)}>Delete</CButton>
@@ -201,4 +230,4 @@ function Bus_Categories() {
     );
 }
 
-export default Bus_Categories;
+export default Routes;
