@@ -14,6 +14,7 @@ const Services = React.lazy(() => import('./views/pages/Admin/Services/Services'
 
 const Reviews = React.lazy(() => import('./views/pages/Admin/Trips/Reviews'))
 const Bus_Categories = React.lazy(() => import('./views/pages/Admin/Bus_Categories/Bus_Categories'))
+const Routes = React.lazy(() => import('./views/pages/Admin/Routes/Routes'))
 
 
 
@@ -29,7 +30,8 @@ const routes = [
     { path: '/trips/:tripId/reviews', name: 'Show Trip Reviews', element: Reviews, exact: true },
     { path: '/buses', name: 'bases', element: Buses, exact: true },
     { path: '/services', name: 'Services', element: Services, exact: true },
-    { path: '/categories', name: 'Categories', element: Bus_Categories, exact: true }
+    { path: '/categories', name: 'Categories', element: Bus_Categories, exact: true },
+    {path: 'routes', name: 'Routes', element:Routes, exact: true}
 
 ]
 export default routes

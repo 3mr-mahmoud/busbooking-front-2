@@ -10,7 +10,9 @@ import {
     cilPeople,
     cilBusAlt,
     cilCog,
-    cilApplications
+    cilApplications,
+    cilMap
+
 
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
@@ -81,9 +83,14 @@ const _nav = [
         name: 'Categories',
         to: '/admin/categories',
         icon: <CIcon icon={cilApplications} customClassName="nav-icon" />,
-
-
+    },
+    {
+        component: CNavItem,
+        name: 'Routes',
+        to: '/admin/routes',
+        icon: <CIcon icon={cilMap} customClassName="nav-icon" />,
     }
+
 
 ]
 
