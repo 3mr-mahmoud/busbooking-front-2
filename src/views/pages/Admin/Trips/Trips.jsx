@@ -11,6 +11,7 @@ import {
     CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea, CFormSelect
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
+import { Link } from 'react-router-dom';
 function Trips() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [trips, setTrips] = useState([]);
@@ -289,8 +290,10 @@ function Trips() {
                                     <CTableDataCell>{trip.actual_departure_time}</CTableDataCell>
                                     <CTableDataCell>{trip.arrival_time}</CTableDataCell>
                                     <CTableDataCell>
-                                        <CButton color="success" className='mx-2' onClick={() => editElement(index)}>Edit</CButton>
-                                        <CButton color="danger" className='mx-2' onClick={() => deleteElement(index)}>Delete</CButton>
+                                        <CButton color="success" size='sm' className='mx-2' onClick={() => editElement(index)}>Edit</CButton>
+                                        <CButton color="danger" size='sm' className='mx-2' onClick={() => deleteElement(index)}>Delete</CButton>
+                                        <Link className="btn btn-sm btn-warning mx-2" to={"/admin/trips/" + trip.id + "/reviews"}>Reviews</Link>
+                                        <Link className="btn btn-sm btn-success mx-2" to={"/admin/trips/" + trip.id + "/tickets"}>Tickets</Link>
                                     </CTableDataCell>
                                 </CTableRow>
                             ))

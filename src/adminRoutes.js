@@ -8,10 +8,11 @@ const Drivers = React.lazy(() => import('./views/pages/Admin/Drivers/Drivers'))
 const Customers = React.lazy(() => import('./views/pages/Admin/Customer/Customers'))
 
 const Trips = React.lazy(() => import('./views/pages/Admin/Trips/Trips'))
+const Tickets = React.lazy(() => import('./views/pages/Admin/Trips/Tickets'))
 const Buses = React.lazy(() => import('./views/pages/Admin/buses/buses'))
 const Services = React.lazy(() => import('./views/pages/Admin/Services/Services'))
 
-const Reviews = React.lazy(() => import('./views/pages/Admin/Reviews/Reviews'))
+const Reviews = React.lazy(() => import('./views/pages/Admin/Trips/Reviews'))
 
 
 
@@ -24,9 +25,9 @@ const routes = [
     { path: '/drivers', name: 'Drivers', element: Drivers, exact: true },
     { path: '/customers', name: 'Drivers', element: Customers, exact: true },
     { path: '/trips', name: 'Trips', element: Trips, exact: true },
+    { path: '/trips/:tripId/reviews', name: 'Show Trip Reviews', element: Reviews, exact: true },
     { path: '/buses', name: 'bases', element: Buses, exact: true },
     { path: '/services', name: 'Services', element: Services, exact: true },
-    {path: '/reviews', name: 'Reviews', element: Reviews, exact: true}
 
 ]
 export default routes

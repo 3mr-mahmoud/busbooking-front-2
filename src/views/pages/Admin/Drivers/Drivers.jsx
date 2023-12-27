@@ -48,7 +48,7 @@ function Drivers() {
                 setName(driver.name);
                 setEmail(driver.email);
                 setPhone(driver.phone);
-                setPassword(driver.password)
+                setPassword("");
                 setCity(driver.city);
                 setLicense(driver.license_number);
                 setNationalID(driver.national_id);

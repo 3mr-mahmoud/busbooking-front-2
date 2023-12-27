@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import {
-    CCard, CCardBody, CCardHeader, CTable, CTableHeaderCell,
-    CTableRow,
-    CTableHead,
-    CTableBody,
-    CTableDataCell, CModal, CModalBody, CModalHeader, CModalTitle, CButton, CFormInput, CFormTextarea, CFormCheck
+    CCard, CCardBody, CCardHeader,
+    CButton, CFormInput, CFormCheck
 } from '@coreui/react';
 import ApiClient from 'src/ApiClient';
 import { useAuth } from 'src/contexts/AuthContext';
@@ -71,9 +68,9 @@ function Profile() {
                         <CFormInput type='password' value={password} onChange={e => setPassword(e.target.value)} autoComplete='off' />
                     </div>
 
-                    <div className='form-group'>
+                    {authUser.superadmin && <div className='form-group'>
                         <CFormCheck id="flexCheckDefault" checked={superAd} onChange={e => setSuper(e.target.checked)} style={{ marginTop: '7px' }} label="Super Admin" />
-                    </div>
+                    </div>}
 
                     <div className='d-flex justify-content-center mt-4'>
                         <CButton color="primary" size='lg' type="submit">Save</CButton>

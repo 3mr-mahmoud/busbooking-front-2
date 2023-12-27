@@ -12,21 +12,30 @@ function Profile() {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [nationalID, setNationalID] = useState('');
+    const [license, setLicense] = useState('');
+    const [city, setCity] = useState('');
 
     useEffect(() => {
         setName(authUser.name);
         setEmail(authUser.email);
         setPhone(authUser.phone);
+        setCity(authUser.city);
+        setLicense(authUser.license_number);
+        setNationalID(authUser.national_id);
         setPassword("");
     }, [authUser]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // updating
-        ApiClient.patch('customer/profile', {
+        ApiClient.patch('driver/profile', {
             'name': name,
             'email': email,
             'phone': phone,
+            'national_id': nationalID,
+            'license_number': license,
+            'city': city,
             'password': password
         }).then((repsonse) => {
             if (repsonse.data.success) {
@@ -63,6 +72,21 @@ function Profile() {
                     <div className='form-group'>
                         <label>Password:</label>
                         <CFormInput type='password' value={password} onChange={e => setPassword(e.target.value)} autoComplete='off' />
+                    </div>
+
+                    <div className='form-group'>
+                        <label>National-ID:</label>
+                        <CFormInput value={nationalID} onChange={e => setNationalID(e.target.value)} />
+                    </div>
+
+                    <div className='form-group'>
+                        <label>Licnense Number:</label>
+                        <CFormInput value={license} onChange={e => setLicense(e.target.value)} />
+                    </div>
+
+                    <div className='form-group'>
+                        <label>City:</label>
+                        <CFormInput value={city} onChange={e => setCity(e.target.value)} />
                     </div>
 
                     <div className='d-flex justify-content-center mt-4'>

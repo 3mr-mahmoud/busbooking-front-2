@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ApiClient from 'src/ApiClient'
+import Datetime from 'react-datetime';
+import 'react-datetime/css/react-datetime.css';
 import {
     CCard,
     CCardBody,
@@ -15,11 +17,13 @@ import {
     CTableBody,
     CTableDataCell,
     CBadge,
-    CFormSelect
+    CFormSelect,
+    CButton
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilUser, cilCash, cilShortText, cilDollar, cilMoney } from '@coreui/icons'
 import { Link } from 'react-router-dom'
+import moment from 'moment';
 
 const CustomerHome = () => {
     const [from, setFrom] = useState("");
@@ -29,10 +33,13 @@ const CustomerHome = () => {
     const [selectedRoute, setSelectedRoute] = useState(null);
 
     const getTrips = () => {
+
+        const formattedFrom = moment(from).isValid() ? moment(from).format("YYYY-MM-DD") : null;
+        const formattedTo = moment(to).isValid() ? moment(to).format("YYYY-MM-DD") : null;
         ApiClient.get('customer/trips/available', {
             params: {
-                'from': from,
-                'to': to,
+                'from': formattedFrom,
+                'to': formattedTo,
                 'route_id': selectedRoute,
             }
         }).then((repsonse) => {
@@ -95,7 +102,7 @@ const CustomerHome = () => {
                                             <h6> Available Seats </h6>
                                             <CBadge color='danger'>{trip.available_seats}</CBadge>
                                         </div>
-                                        <Link to={"customer/trips/" + trip.id} className="btn btn-warning text-white">
+                                        <Link to={"/customer/trips/" + trip.id} className="btn btn-warning text-white">
                                             Explore
                                         </Link>
                                     </CCardBody>
@@ -128,6 +135,26 @@ const CustomerHome = () => {
                                             </option>
                                         ))}
                                     </CFormSelect>
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>From :</label>
+                                    <Datetime
+                                        value={from}
+                                        dateFormat="YYYY-MM-DD"
+                                        onChange={(date) => setFrom(date)}
+                                        timeFormat={false}
+                                    />
+                                </div>
+
+                                <div className='form-group'>
+                                    <label>To :</label>
+                                    <Datetime
+                                        value={to}
+                                        dateFormat="YYYY-MM-DD"
+                                        onChange={(date) => setTo(date)}
+                                        timeFormat={false}
+                                    />
                                 </div>
                             </CRow>
                         </CCardBody>
