@@ -71,7 +71,7 @@ const CustomerHome = () => {
                 <CCol md={9}>
                     <CRow>
                         {availableTrips.map((trip) => (
-                            <CCol md="4" key={trip.id}>
+                            <CCol md="4" className='mb-4' key={trip.id}>
                                 <CCard>
                                     <CCardBody className='d-flex justify-content-center flex-column gap-3'>
                                         <h3 className='text-center'>{trip.route_name}</h3>
