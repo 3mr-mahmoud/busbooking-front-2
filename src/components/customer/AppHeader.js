@@ -12,7 +12,7 @@ import {
 import CIcon from '@coreui/icons-react'
 
 import { AppHeaderDropdown } from './header/index'
-import { logo } from 'src/assets/brand/logo'
+import logoLargeInvert from 'src/assets/brand/logo_large_invert.png'
 import { useAuth } from 'src/contexts/AuthContext'
 
 const AppHeader = () => {
