@@ -9,14 +9,14 @@ import {
   CRow,
 } from '@coreui/react'
 import { useAuth } from 'src/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import ApiClient from 'src/ApiClient';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
-  const { authenticated, login } = useAuth();
+  const { authenticated, guard, login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -47,10 +47,10 @@ const Register = () => {
 
   useEffect(() => {
     // Use useEffect for navigation after login
-    if (authenticated) {
+    if (authenticated && guard == 'customer') {
       navigate('/customer');
     }
-  }, [authenticated, navigate]);
+  }, [authenticated, guard, navigate]);
 
 
   return (
@@ -82,15 +82,17 @@ const Register = () => {
                     <CFormInput type='password' value={password} onChange={e => setPassword(e.target.value)} autoComplete={false} required />
                   </div>
                   <div className='form-group'>
-                    <label>Password:</label>
+                    <label>Password Confirmation:</label>
                     <CFormInput type='password' value={passwordConfirmation} onChange={e => setPasswordConfirmation(e.target.value)} autoComplete={false} required />
                   </div>
 
 
 
-                  <div className='d-flex justify-content-center mt-4'>
+                  <div className='d-flex justify-content-between mt-4'>
                     <CButton color="primary" size='lg' type="submit">Register</CButton>
+                    <Link to={'/customer/login'} className='text-primary'>Login</Link>
                   </div>
+
                 </form>
               </CCardBody>
             </CCard>

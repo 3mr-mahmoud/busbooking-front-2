@@ -135,7 +135,7 @@ const ShowTrip = () => {
                             <div className='d-flex'>
                                 {trip.category_services.map((service) => (
                                     <h4 key={service.id}>
-                                        <CBadge color='success' className='mb-2'>
+                                        <CBadge color='success' className='mb-2 me-2'>
                                             {service.name}
                                         </CBadge>
                                     </h4>
