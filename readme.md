@@ -38,22 +38,22 @@ For admin access, use the provided admin credentials to log in to the admin dash
 Here are some screenshots showcasing different aspects of the Bus Booking System:
 
 
-   ![Home Page](./screenshots/ (1).png)
+   ![Home Page](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(1).png)
 
-   ![Search Results](screenshots/ (2).png)
+   ![Search Results](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(2).png)
 
-   ![Seat Selection](screenshots/ (3).png)
+   ![Seat Selection](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(3).png)
 
-   ![Booking Details](screenshots/ (4).png)
+   ![Booking Details](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(4).png)
 
-   ![Payment Gateway](screenshots/ (5).png)
+   ![Payment Gateway](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(5).png)
 
-   ![User Dashboard](screenshots/ (6).png)
-   ![Booking History](screenshots/ (7).png)
-   ![Admin Dashboard](screenshots/ (8).png)
-   ![Bus Management](screenshots/ (9).png)
+   ![User Dashboard](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(6).png)
+   ![Booking History](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(7).png)
+   ![Admin Dashboard](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(8).png)
+   ![Bus Management](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(9).png)
 
-    ![Schedule Management](screenshots/ (10).png)
-    ![User Management](screenshots/ (11).png)
+    ![Schedule Management](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(10).png)
+    ![User Management](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(11).png)
 
 Feel free to explore the system with these visual representations. If you have any questions or feedback, please let us know!
