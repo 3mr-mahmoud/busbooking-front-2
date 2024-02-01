@@ -53,7 +53,4 @@ Here are some screenshots showcasing different aspects of the Bus Booking System
    ![Admin Dashboard](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(8).png)
    ![Bus Management](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(9).png)
 
-    ![Schedule Management](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(10).png)
-    ![User Management](https://raw.githubusercontent.com/3mr-mahmoud/busbooking-front-2/main/screenshots/%20(11).png)
-
 Feel free to explore the system with these visual representations. If you have any questions or feedback, please let us know!
